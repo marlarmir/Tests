@@ -1,0 +1,130 @@
+import rhinoscriptsyntax as rs
+import Rhino as rh
+import math
+
+def listxyz(Z0, tmin, dt, n, f, nur, nvZeta, vZetamin, urmin):
+    t=[]
+    for i in range (tmin, n, 1):
+        ts=tmin+dt*i
+        t.append(ts)
+    to=len(t)
+    listX=[]
+    z0=Z0
+    for u in range (0, nur+1, 1):
+        z0=Z0
+        sum=0
+        ur=urmin+du*u
+        zt=ur
+        for ts in range (0, to-1, 1):
+            try:
+                g=(a1*(z0+(zt-z0)t[ts])3+a2(z0+(zt-z0)t[ts])2+a3(z0+(zt-z0)t[ts])+a4)/(b1(z0+(zt-z0)t[ts])3+b2(z0+(zt-z0)t[ts])2+b3(z0+(zt-z0)*t[ts])+b4)
+            except ZeroDivisionError:
+                g=0
+            ntg=f*(1-(g*2))(zt-z0)*(t[ts]-t[ts+1])
+            rntg=ntg.real
+            sum=sum+rntg
+        for v in range (0, nvZeta+1, 1):
+            z0=zt
+            vZeta=vZetamin+dv*v
+            zt=((ur)(math.cos(vZeta)))+(1j(ur)*(math.sin(vZeta)))
+            for ts in range (0, to-1, 1):
+                try:
+                    g=(a1*(z0+(zt-z0)t[ts])3+a2(z0+(zt-z0)t[ts])2+a3(z0+(zt-z0)t[ts])+a4)/(b1(z0+(zt-z0)t[ts])3+b2(z0+(zt-z0)t[ts])2+b3(z0+(zt-z0)*t[ts])+b4)
+                except ZeroDivisionError:
+                    g=0
+                ntg=f*(1-(g*2))(zt-z0)*(t[ts]-t[ts+1])
+                rntg=ntg.real
+                sum=sum+rntg
+            listX.append(sum)
+    
+    listY=[]
+    sum=0
+    z0=Z0
+    for u in range (0, nur+1, 1):
+        z0=Z0
+        sum=0
+        ur=urmin+du*u
+        zt=ur
+        for ts in range (0, to-1, 1):
+            try:
+                g=(a1*(z0+(zt-z0)t[ts])3+a2(z0+(zt-z0)t[ts])2+a3(z0+(zt-z0)t[ts])+a4)/(b1(z0+(zt-z0)t[ts])3+b2(z0+(zt-z0)t[ts])2+b3(z0+(zt-z0)*t[ts])+b4)
+            except ZeroDivisionError:
+                g=0
+            ntg=f*((1j+1j*(g*2)))(zt-z0)*(t[ts]-t[ts+1])
+            rntg=ntg.real
+            sum=sum+rntg
+        for v in range (0, nvZeta+1, 1):
+            z0=zt
+            vZeta=vZetamin+dv*v
+            zt=((ur)(math.cos(vZeta)))+(1j(ur)*(math.sin(vZeta)))
+            for ts in range (0, to-1, 1):
+                try:
+                    g=(a1*(z0+(zt-z0)t[ts])3+a2(z0+(zt-z0)t[ts])2+a3(z0+(zt-z0)t[ts])+a4)/(b1(z0+(zt-z0)t[ts])3+b2(z0+(zt-z0)t[ts])2+b3(z0+(zt-z0)*t[ts])+b4)
+                except ZeroDivisionError:
+                    g=0
+                ntg=f*((1j+1j*(g*2)))(zt-z0)*(t[ts]-t[ts+1])
+                rntg=ntg.real
+                sum=sum+rntg
+            listY.append(sum)
+    
+    listZ=[]
+    sum=0
+    z0=Z0
+    for u in range (0, nur+1, 1):
+        z0=Z0
+        sum=0
+        ur=urmin+du*u
+        zt=ur
+        for ts in range (0, to-1, 1):
+            try:
+                g=(a1*(z0+(zt-z0)t[ts])3+a2(z0+(zt-z0)t[ts])2+a3(z0+(zt-z0)t[ts])+a4)/(b1(z0+(zt-z0)t[ts])3+b2(z0+(zt-z0)t[ts])2+b3(z0+(zt-z0)*t[ts])+b4)
+            except ZeroDivisionError:
+                g=0
+            ntg=f*((2*g))(zt-z0)(t[ts]-t[ts+1])
+            rntg=ntg.real
+            sum=sum+rntg
+        for v in range (0, nvZeta+1, 1):
+            z0=zt
+            vZeta=vZetamin+dv*v
+            zt=((ur)(math.cos(vZeta)))+(1j(ur)*(math.sin(vZeta)))
+            for ts in range (0, to-1, 1):
+                try:
+                    g=(a1*(z0+(zt-z0)t[ts])3+a2(z0+(zt-z0)t[ts])2+a3(z0+(zt-z0)t[ts])+a4)/(b1(z0+(zt-z0)t[ts])3+b2(z0+(zt-z0)t[ts])2+b3(z0+(zt-z0)*t[ts])+b4)
+                except ZeroDivisionError:
+                    g=0
+                ntg=f*((2*g))(zt-z0)(t[ts]-t[ts+1])
+                rntg=ntg.real
+                sum=sum+rntg
+            listZ.append(sum)
+    
+    listCrv=[]
+    totPnt=[]
+    for i in range (0, nur+1, 1):
+        if i>=1:
+            curve=rs.coercecurve(rs.AddInterpCurve(listPnt))
+            listCrv.append(curve)
+        listPnt=[]
+        for j in range (0, nvZeta+1, 1):
+            pnt=rs.coerce3dpoint(rs.AddPoint(listX[(nvZeta+1)*i+j], listY[(nvZeta+1)*i+j], listZ[(nvZeta+1)*i+j]))
+            listPnt.append(pnt)
+            totPnt.append(pnt)
+    curve=rs.coercecurve(rs.AddInterpCurve(listPnt))
+    listCrv.append(curve)
+    return totPnt, listCrv
+
+a1=0
+a2=0
+a3=1
+a4=0
+b1=0
+b2=0
+b3=0
+b4=1
+
+tmin=0
+tmax=1
+du=(urmax-urmin)/nur
+dv=(vZetamax-vZetamin)/nvZeta
+dt=(tmax-tmin)/n
+
+totPnt, listCrv=listxyz(Z0, tmin, dt, n, f, nur, nvZeta, vZetamin, urmin)
